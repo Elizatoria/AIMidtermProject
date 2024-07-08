@@ -12,6 +12,11 @@ get_wolfram_alpha_answer: Returns a factual answer to a query using the Wolfram 
 import datetime
 import psutil
 import requests
+from dotenv import load_dotenv
+from openai import OpenAI
+import os, json
+
+load_dotenv("C:/Users/Eliza/Documents/MachineLearning/AI_API/midterm_api.env")
 
 # Function to get current date and time
 def get_current_datetime():
@@ -26,20 +31,20 @@ def get_battery_status():
     }
 
 # Function to get top news headlines
-def get_top_headlines(api_key):
-    url = f"https://newsapi.org/v2/top-headlines?country=us&apiKey={api_key}"
+def get_top_headlines(News_API):
+    url = f"https://newsapi.org/v2/top-headlines?country=us&apiKey={News_API}"
     response = requests.get(url)
     return response.json()
 
 # Function to get current weather
-def get_current_weather(api_key, location):
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}"
+def get_current_weather(Weather_API, location):
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={Weather_API}"
     response = requests.get(url)
     return response.json()
 
 # Function to get factual information
-def get_wolfram_alpha_answer(api_key, query):
-    url = f"http://api.wolframalpha.com/v1/result?i={query}&appid={api_key}"
+def get_wolfram_alpha_answer(WolfRam_API, query):
+    url = f"http://api.wolframalpha.com/v1/result?i={query}&appid={WolfRam_API}"
     response = requests.get(url)
     return response.text
 
@@ -49,7 +54,7 @@ def get_wolfram_alpha_answer(api_key, query):
 
 import openai
 
-openai.api_key = 'your-openai-api-key'
+openai.api_key = 'OPENAI_API_KEY'
 
 messages = []
 
