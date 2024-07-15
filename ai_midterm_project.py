@@ -1,10 +1,11 @@
-from openai import OpenAI
+import openai
 import os
 import json
 import requests
 from datetime import datetime
 import psutil
 from dotenv import load_dotenv
+from openai import OpenAI
 
 # Load environment variables from .env file
 load_dotenv("C:/Users/Eliza/Documents/MachineLearning/AI_API/midterm_api.env")
@@ -63,7 +64,7 @@ def ask_wolfram(query):
         return response.text
     else:
         return "Sorry, I couldn't retrieve the answer."
-
+'''___Above Working___'''
 # Define the tool list with function descriptions
 tools = [
     {
@@ -144,7 +145,7 @@ def run_conversation():
         )
 
         response_message = response.choices[0].message
-        tool_calls = response_message.get("function_calls", [])
+        tool_calls = response.message.get("function_calls", [])
 
         if tool_calls:
             for tool_call in tool_calls:
