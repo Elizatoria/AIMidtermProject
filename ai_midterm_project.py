@@ -1,12 +1,19 @@
-import openai
+from openai import OpenAI
 import os
 import json
 import requests
 from datetime import datetime
 import psutil
+from dotenv import load_dotenv
 
-# Load your OpenAI API key from environment variables or other sources
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Load environment variables from .env file
+load_dotenv("C:/Users/Eliza/Documents/MachineLearning/AI_API/midterm_api.env")
+
+# Access environment variables
+client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
+openweathermap_api_key = os.getenv("OPENWEATHERMAP_API_KEY")
+newsapi_key = os.getenv("NEWSAPI_KEY")
+wolframalpha_app_id = os.getenv("WOLFRAMALPHA_APP_ID")
 
 # Initialize the message list
 message_list = [
@@ -18,8 +25,7 @@ message_list = [
 
 # Define the functions to interact with external APIs and libraries
 def get_current_weather(location, unit="fahrenheit"):
-    api_key = os.getenv("OPENWEATHERMAP_API_KEY")
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&units={'imperial' if unit == 'fahrenheit' else 'metric'}&appid={api_key}"
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&units={'imperial' if unit == 'fahrenheit' else 'metric'}&appid={openweathermap_api_key}"
     response = requests.get(url)
     data = response.json()
     if response.status_code == 200:
@@ -30,8 +36,7 @@ def get_current_weather(location, unit="fahrenheit"):
         return "Sorry, I couldn't retrieve the weather data."
 
 def get_top_headlines():
-    api_key = os.getenv("NEWSAPI_KEY")
-    url = f"https://newsapi.org/v2/top-headlines?country=us&apiKey={api_key}"
+    url = f"https://newsapi.org/v2/top-headlines?country=us&apiKey={newsapi_key}"
     response = requests.get(url)
     data = response.json()
     if response.status_code == 200:
@@ -52,8 +57,7 @@ def get_current_time_and_date():
     return f"The current date and time is {now.strftime('%Y-%m-%d %H:%M:%S')}."
 
 def ask_wolfram(query):
-    app_id = os.getenv("WOLFRAMALPHA_APP_ID")
-    url = f"http://api.wolframalpha.com/v1/result?i={query}&appid={app_id}"
+    url = f"http://api.wolframalpha.com/v1/result?i={query}&appid={wolframalpha_app_id}"
     response = requests.get(url)
     if response.status_code == 200:
         return response.text
@@ -132,7 +136,7 @@ def run_conversation():
             "content": user_input
         })
 
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=message_list,
             functions=tools,
