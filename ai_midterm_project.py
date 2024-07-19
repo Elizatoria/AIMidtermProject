@@ -64,7 +64,7 @@ def ask_wolfram(query):
         return response.text
     else:
         return "Sorry, I couldn't retrieve the answer."
-'''___Above Working___'''
+
 # Define the tool list with function descriptions
 tools = [
     {
@@ -127,7 +127,7 @@ tools = [
         }
     }
 ]
-
+'''___Above Working___'''
 # Function to handle the conversation
 def run_conversation():
     while True:
