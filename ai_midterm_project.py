@@ -1,3 +1,14 @@
+'''
+1. Set up Evviroment
+pip install psutil requests python-dotenv openai
+
+2. Create Data Retrieval Functions
+get_current_weather: Returns the current weather for a specified location using the OpenWeatherMap API.
+ask_wolfram: Returns a factual answer to a query using the Wolfram Alpha Short Answers API.
+get_current_time_and_date: Returns the current date and time.
+get_top_headlines: Returns the top news headlines using the NewsAPI.
+get_battery_status: Returns the battery percentage and whether the device is plugged in.
+'''
 import datetime
 import psutil
 import requests
@@ -56,8 +67,16 @@ def get_battery_status():
     else:
         return "Sorry, I couldn't retrieve the battery status."
 
+'''3. Create the Function to make the Conversation Chatbot'''
 # Function to handle the conversation
 def run_conversation():
+    '''Test Messages to make sure the APIs are connected and the Functions are correct'''
+    # messages = [{"role": "user", "content": "What's the weather like in San Francisco, Tokyo, and Paris?"}]  # Weather for San Francisco, Tokyo, and Paris
+    # messages = [{"role": "user", "content": "What is the percent of 68 out of 100?"}]  # 68/100 = 0.68
+    # messages = [{"role": "user", "content": "What is the current date and time?"}]  # Today's date and time
+    # messages = [{"role": "user", "content": "What are the top headlines?"}]  # Top headlines for today
+    # messages = [{"role": "user", "content": "What is the battery status?"}]  # Battery status
+    '''Actual Messages (Message_List)'''
     # Set up the initial message list with a system message
     messages = [
         {
@@ -65,7 +84,10 @@ def run_conversation():
             "content": "You are a helpful assistant."
         }
     ]
-
+    '''
+    Function Dictionaries
+    Create the tool list that describes these functions and the arguments necessary for the function in natural language.
+    '''
     tools = [
         {
             "type": "function",
@@ -121,7 +143,10 @@ def run_conversation():
             }
         }
     ]
-
+    '''
+    Begin the Loop and ask for a Prompt
+    Make a loop where the prompt and response pairs are appended to the message list
+    '''
     while True:
         prompt = input("Enter a prompt (or type 'exit' to quit): ")
         if prompt.lower() == 'exit':
@@ -155,7 +180,10 @@ def run_conversation():
             }
             messages.append(response_message)
             
-            # Call the functions
+            '''
+            Append the data returned from the called function to the message list with the role “tool” 
+            and make another API call for the final response
+            '''
             for tool_call in tool_calls:
                 function_name = tool_call.function.name
                 function_to_call = available_functions[function_name]
@@ -177,3 +205,29 @@ def run_conversation():
             print(second_response.choices[0].message.content)
 
 print(run_conversation())
+
+'''
+Addition Test Questions for the actual prompt
+
+1. Who is the Director for Transformers One? The director for the first Transformers movie is Michael Bay.  
+# Transformers One seems to be too new, so they give informtion for the first Transformers movie instead. 
+# However, Michael Bay is still on the Production Team, just not the Director.
+
+2. What is a top headline for today? Here are some top headlines for today: (07/21/2024)
+# 1. Bangladesh Cops Given Shoot-On-Sight Orders Amid Curfew To Quell Student Protests - from NDTV
+# 2. WNBA All-Stars vs. Team USA: Caitlin Clark, Angel Reese make rookie debuts - from USA TODAY
+# 3. Israeli military airstrikes hit Houthi targets in Yemen in retaliation to attacks - from CBS News
+# 4. Country singer Rory Feek marries his daughter’s teacher 8 years after death of his wife Joey - from Page Six
+# 5. NASA’s Curiosity rover makes ‘mind-blowing’ discovery on Mars - from New York Post
+(Function is coded to give five Headlines)
+
+3. What is the weather for Rome? The current weather in Rome is 80.11 degrees Fahrenheit with broken clouds. (07/21/2024 9:38 PM)
+
+4. What is the weather for New York? The current weather in New York is 77.95 degrees Fahrenheit with light rain. (07/21/2024 9:38 PM)
+
+5. What is the battery status? The battery is at 98% and is currently charging.
+
+6. What is the date and time for today? The current date and time for today is 2024-07-21 21:57:58.
+
+# "Is there anything else you would like to know?" is the response if it doesn't understand a question.
+'''
