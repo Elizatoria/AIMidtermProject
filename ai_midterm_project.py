@@ -210,7 +210,7 @@ print(run_conversation())
 Addition Test Questions for the actual prompt
 
 1. Who is the Director for Transformers One? The director for the first Transformers movie is Michael Bay.  
-# Transformers One seems to be too new, so they give informtion for the first Transformers movie instead. 
+# Transformers One seems to be too new, so they give informtion for the first live action Transformers movie instead. 
 # However, Michael Bay is still on the Production Team, just not the Director.
 
 2. What is a top headline for today? Here are some top headlines for today: (07/21/2024)
